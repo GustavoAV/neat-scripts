@@ -12,7 +12,7 @@ To run these scripts, you have to clone this project and execute:
 chmod +x <filename>           # Give executable permissions to the script
 ./<filename>                  # Run the script
 
-mv <filename> /usr/local/bin  # If you want the script to be available system wide
+mv <filename> /usr/local/bin/ # If you want the script to be available system wide
 ```
 
 ## Useful links
