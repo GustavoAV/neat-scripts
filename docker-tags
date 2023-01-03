@@ -3,6 +3,7 @@
 # Description:
 #   Get all tags of said docker image.
 #   Before execution, it checks if curl/wget and python are available.
+#   To use this without "bash", change the firstline to "#!/bin/sh" and the set line to "set -eu".
 # Usage:
 #   docker-tags <image-name>
 # Based on https://stackoverflow.com/a/48931329
@@ -13,7 +14,6 @@
 #   https://hub.docker.com/_/python#:~:text=the%20FAQ.)-,Simple%20Tags)
 # - Optimize python code readability
 # - Create test cases
-# - Adapt to not use bash
 # - Adapt to not use python
 
 set -euo pipefail
