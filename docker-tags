@@ -9,6 +9,7 @@
 # BASED ON:
 #   https://stackoverflow.com/a/48931329
 # TODO:
+#   - Adapt to work with images with slash in name (e.g. bitnami/postgres)
 #   - Add usage section in script
 #   - Add option to bring all tags instead of just unique ones (e.g.
 #     https://hub.docker.com/_/python#:~:text=the%20FAQ.)-,Simple%20Tags)
