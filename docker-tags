@@ -1,20 +1,20 @@
 #!/bin/bash
 
-# Description:
+# DESCRIPTION:
 #   Get all tags of said docker image.
 #   Before execution, it checks if curl/wget and python are available.
 #   To use this without "bash", change the firstline to "#!/bin/sh" and the set line to "set -eu".
-# Usage:
+# USAGE:
 #   docker-tags <image-name>
-# Based on https://stackoverflow.com/a/48931329
-
+# BASED ON:
+#   https://stackoverflow.com/a/48931329
 # TODO:
-# - Add usage section in script
-# - Add option to bring all tags instead of just unique ones (e.g.
-#   https://hub.docker.com/_/python#:~:text=the%20FAQ.)-,Simple%20Tags)
-# - Optimize python code readability
-# - Create test cases
-# - Adapt to not use python
+#   - Add usage section in script
+#   - Add option to bring all tags instead of just unique ones (e.g.
+#     https://hub.docker.com/_/python#:~:text=the%20FAQ.)-,Simple%20Tags)
+#   - Optimize python code readability
+#   - Create test cases
+#   - Adapt to not use python (perhaps)
 
 set -euo pipefail
 
@@ -61,3 +61,5 @@ fi
   # Finally break the line of dots
   >&2 echo
 ) | cut -d '-' -f 1 | sort -V | uniq;
+
+exit 0
