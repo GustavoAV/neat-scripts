@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# DESCRIPTION:
+#   Small description of the script purpose.
+# USAGE:
+#   Simple script usage.
+# BASED ON:
+#   https://foo.bar/question
+# TODO:
+#   - Task 1
+#   - Task 2
+
+set -euo pipefail
+
+# HERE GOES THE CODE
+
+exit 0
