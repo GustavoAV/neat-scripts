@@ -14,16 +14,16 @@
 
 set -euo pipefail
 
-# Installs "gettext"
+# Install "gettext"
 apk add --no-cache --virtual .gettext gettext
 # Move "envsubst" out of the way
 mv /usr/bin/envsubst /tmp/
-runDeps="$( \
-    scanelf --needed --nobanner /tmp/envsubst \
-        | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
-        | sort -u \
-        | xargs -r apk info --installed \
-        | sort -u \
+runDeps="$(
+    scanelf --needed --nobanner /tmp/envsubst |
+        awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' |
+        sort -u |
+        xargs -r apk info --installed |
+        sort -u
 )"
 # Delete "gettext" completely
 apk add --no-cache $runDeps
