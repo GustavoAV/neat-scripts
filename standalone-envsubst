@@ -11,24 +11,24 @@
 #   envsubst  smaller  5.65MB   # Using this script
 # BASED ON:
 #   https://github.com/nginxinc/docker-nginx/blob/5ce65c3efd395ee2d82d32670f233140e92dba99/mainline/alpine-slim/Dockerfile#:~:text=Bring%20in%20gettext,the%20rest%20away
-# TODO:
-#   - Create "apt-get" version
 
 set -euo pipefail
 
-# Installs "gettext" then move "envsubst" out of the way so "gettext" can be deleted completely, then move "envsubst" back.
-apk add --no-cache --virtual .gettext gettext \
-&& mv /usr/bin/envsubst /tmp/ \
-\
-&& runDeps="$( \
+# Installs "gettext"
+apk add --no-cache --virtual .gettext gettext
+# Move "envsubst" out of the way
+mv /usr/bin/envsubst /tmp/
+runDeps="$( \
     scanelf --needed --nobanner /tmp/envsubst \
         | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
         | sort -u \
         | xargs -r apk info --installed \
         | sort -u \
-)" \
-&& apk add --no-cache $runDeps \
-&& apk del .gettext \
-&& mv /tmp/envsubst /usr/local/bin/
+)"
+# Delete "gettext" completely
+apk add --no-cache $runDeps
+apk del .gettext
+# Move "envsubst" back
+mv /tmp/envsubst /usr/local/bin/
 
 exit 0
