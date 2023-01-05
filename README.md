@@ -2,9 +2,9 @@
 
 Collection of cool and/or useful scripts that I seldom use.
 
-## Usage
+> These weren't heavily tested. Their use in production or automated environments is **not** recommended.
 
-> Note that these can only run in *nix environments (and maybe WSL, dunno).
+## Usage
 
 To run the scripts, you have to clone this project and execute:
 
@@ -14,6 +14,8 @@ chmod +x <filename>           # Give executable permissions to the file
 
 mv <filename> /usr/local/bin/ # If you want to make it available system wide
 ```
+
+> Note that these can only run in *nix environments (and maybe WSL, dunno).
 
 ## Useful links
 
