@@ -6,9 +6,6 @@
 #   Simple script usage.
 # BASED ON:
 #   https://foo.bar/question
-# TODO:
-#   - Task 1
-#   - Task 2
 
 set -euo pipefail
 

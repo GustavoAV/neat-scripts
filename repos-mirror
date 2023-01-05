@@ -5,49 +5,53 @@
 # USAGE:
 #   Create and fill "source_project_list.txt" with the projects url list and then run:
 #   repos-mirror <dest-repo>
-# TODO:
-#   - Test with Github repos (only used it in Gitlab)
-#   - Get all projects of said repository via API
 
 set -euo pipefail
 
-source_project_list="$(cat source_project_list.txt)"
 dest_group_url="$1"
 
+if [[ -e "source_project_list.txt" ]]; then
+    source_project_list="$(cat source_project_list.txt)"
+else
+    echo "You have to create the 'source_project_list.txt' file first!"
+    exit 1
+fi
+
 main() {
-  for project in "$source_project_list"; do
-      
-    source_project_url="$project"
-    # Get project name only, removing ".git" if present
-    project_name="$(
-      basename
-      "$source_project_url"
-      ".${source_project_url##*.}"
-    )"
+    for project in "$source_project_list"; do
+        
+        source_project_url="$project"
+        # Get project name only, removing ".git" if present
+        project_name="$(
+            basename
+                "$source_project_url"
+                ".${source_project_url##*.}"
+        )"
 
-    # On the first iteration, clones base project
-    # On the second, clones the wiki
-    for i in 1 2; do
+        # On the first iteration, clones base project
+        # On the second, clones the wiki
+        for i in 1 2; do
 
-      if [[ "$i" == 2 ]]; then
-        source_project_url="$source_project_url.wiki"
-        project_name="$project_name.wiki"
-      fi
+            if [[ "$i" == 2 ]]; then
+                source_project_url="$source_project_url.wiki"
+                project_name="$project_name.wiki"
+            fi
 
-      echo "Cloning $project_name from source repository..."
-      
-      git clone --quiet "$source_project_url"
-      cd "$project_name"
-      git remote set-url origin "$dest_group_url/$project_name"
-      
-      echo "Sending $project_name to destiny repository..."
-      
-      git push
-      cd ../
-      rm -rf ${project_name}/
-    
+        echo "Cloning $project_name from source repository..."
+        
+        git clone --quiet "$source_project_url"
+        cd "$project_name"
+        git remote set-url origin "$dest_group_url/$project_name"
+        
+        echo "Sending $project_name to destiny repository..."
+        
+        git push
+        cd ../
+        rm -rf ${project_name}/
+        
+        done
+
     done
-  done
 }
 
 main
