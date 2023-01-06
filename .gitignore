@@ -3,6 +3,7 @@
 #################
 HELP.md
 Dockerfile
+Dockerfile-*
 
 ###################
 # Compiled source #
