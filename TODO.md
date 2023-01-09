@@ -5,7 +5,6 @@ List of tasks (features or fixes) that I'm supposed to do in the scripts and the
 ## [docker-tags](./docker-tags)
 
 - [ ] Add option to bring all tags instead of just unique ones (e.g. [Dockerhub Python Tags](https://hub.docker.com/_/python#:~:text=the%20FAQ.-,Simple%20Tags))
-- [ ] Optimize python code readability
 - [ ] Adapt to not use python (perhaps), only pure shell
 
 ## [repos-mirror](./repos-mirror)
