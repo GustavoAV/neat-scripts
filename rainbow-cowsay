@@ -1,10 +1,11 @@
+#!/bin/bash
+
 # DESCRIPTION:
 #   Function to print a "rainbow coloured random cowsay option" saying something whenever you open your terminal.
-#   Note that you need "lolcat" installed to run this.
-#   In newer Ubuntu versions, it's in the standard apt repository.
+#   Note that you need "lolcat" installed to run this. In newer Ubuntu versions, it's in the standard apt repository.
 #   Here's the Github to it: https://github.com/busyloop/lolcat
 # USAGE:
-#   Put this file content (including the function call) at the end of your "~/.bashrc", close and open your terminal.
+#   Put this file content (excluding the "shebang" at the top) at the end of your "~/.bashrc", close and open your terminal.
 #   You can send other stuff to the function like:
 #   rainbow_cowsay 'echo -n "Hello, Gustavo!"'
 #   or
