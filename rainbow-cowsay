@@ -1,0 +1,29 @@
+# DESCRIPTION:
+#   Function to print a "rainbow coloured random cowsay option" saying something whenever you open your terminal.
+#   Note that you need "lolcat" installed to run this.
+#   In newer Ubuntu versions, it's in the standard apt repository.
+#   Here's the Github to it: https://github.com/busyloop/lolcat
+# USAGE:
+#   Put this file content (including the function call) at the end of your "~/.bashrc", close and open your terminal.
+#   You can send other stuff to the function like:
+#   rainbow_cowsay 'echo -n "Hello, Gustavo!"'
+#   or
+#   rainbow_cowsay fortune
+#   P.S: Pay attention to the quotes!
+
+
+rainbow_cowsay(){
+    # Store command output in array: https://stackoverflow.com/a/11426834
+    local options=( $(
+        for file in $(ls /usr/share/cowsay/cows/); do
+            basename "$file" .cow
+        done
+    ) )
+
+    # Select random item of array in bash: https://stackoverflow.com/a/2388555
+    local random_option="${options[ $RANDOM % ${#options[@]} ]}"
+
+    $1 | cowsay -f "$random_option" | lolcat
+}
+
+rainbow_cowsay 'echo -n "Hello World!"'
