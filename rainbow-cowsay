@@ -14,7 +14,7 @@ input="$@"
 
 main(){
     # Store command output in array: https://stackoverflow.com/a/11426834
-    local options=( $(
+    readonly options=( $(
         # List all "cowsay" options
         for file in $(ls /usr/share/cowsay/cows/); do
             # Remove ".cow" from the files names
@@ -23,12 +23,12 @@ main(){
     ) )
 
     # Select random item of array in bash: https://stackoverflow.com/a/2388555
-    local random_option="${options[ $RANDOM % ${#options[@]} ]}"
+    readonly random_option="${options[ $RANDOM % ${#options[@]} ]}"
 
     # Make your input *~fabulous~*
     $input | cowsay -f "$random_option" | lolcat
 }
 
-main "$@"
+main
 
 exit 0
