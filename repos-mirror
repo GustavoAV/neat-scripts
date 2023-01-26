@@ -19,7 +19,7 @@ fi
 
 main() {
     for project in "$source_project_list"; do
-        
+
         source_project_url="$project"
         # Get project name only, removing ".git" if present
         project_name="$(
@@ -38,17 +38,17 @@ main() {
             fi
 
         echo "Cloning $project_name from source repository..."
-        
+
         git clone --quiet "$source_project_url"
         cd "$project_name"
         git remote set-url origin "$dest_group_url/$project_name"
-        
+
         echo "Sending $project_name to destiny repository..."
-        
+
         git push
         cd ../
         rm -rf ${project_name}/
-        
+
         done
 
     done
