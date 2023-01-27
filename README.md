@@ -2,7 +2,8 @@
 
 Collection of cool and/or useful scripts that I seldom use.
 
-> These weren't heavily tested. Their use in production or automated environments is **not** recommended.
+> These weren't heavily tested.
+> Their use in production or automated environments is **not** recommended.
 
 ## Usage
 
@@ -41,6 +42,21 @@ main
 
 exit 0
 ```
+
+You should use [pre-commit](https://pre-commit.com/) to auto verify your code
+before commiting. You can install the tool with:
+
+```bash
+pip install --user pre-commit
+```
+
+After this, run:
+
+```bash
+pre-commit install
+```
+
+Now, pre-commit will run on every commit. It's pretty damn useful!
 
 ## Useful links
 
