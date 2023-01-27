@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # DESCRIPTION:
 #   Installs the "gettext" package, which constains the widely useful "envsubst" command and removes the other stuff it brings together.
