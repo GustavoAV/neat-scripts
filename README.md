@@ -17,6 +17,31 @@ mv <filename> /usr/local/bin/ # If you want to make it available system wide
 
 > Note that these can only run in *nix environments (and maybe WSL, dunno).
 
+## Development
+
+There is a simple template for new scripts:
+
+```bash
+#!/bin/bash
+
+# DESCRIPTION:
+#   Small description of the script purpose.
+# USAGE:
+#   Simple script usage.
+# BASED ON:
+#   https://foo.bar/question
+
+set -euo pipefail
+
+main() {
+    # Here goes the code
+}
+
+main
+
+exit 0
+```
+
 ## Useful links
 
 Generic tips for writing Shell Scripts: [progrium/bashstyle](https://github.com/progrium/bashstyle)
