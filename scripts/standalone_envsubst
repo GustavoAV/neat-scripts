@@ -16,6 +16,7 @@ set -euo pipefail
 
 # Install "gettext"
 apk add --no-cache --virtual .gettext gettext
+
 # Move "envsubst" out of the way
 mv /usr/bin/envsubst /tmp/
 runDeps="$(
@@ -25,9 +26,11 @@ runDeps="$(
         xargs -r apk info --installed |
         sort -u
 )"
+
 # Delete "gettext" completely
-apk add --no-cache $runDeps
+apk add --no-cache "$runDeps"
 apk del .gettext
+
 # Move "envsubst" back
 mv /tmp/envsubst /usr/local/bin/
 
