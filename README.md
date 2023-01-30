@@ -47,7 +47,7 @@ You should use [pre-commit](https://pre-commit.com/) to auto verify your code
 before commiting. You can install the tool with:
 
 ```bash
-pip install --user pre-commit
+python3 -m pip install --user pre-commit
 ```
 
 After this, run:
@@ -56,7 +56,7 @@ After this, run:
 pre-commit install
 ```
 
-Now, pre-commit will run on every commit. It's pretty damn useful!
+Now, pre-commit will run some hooks on every commit!
 
 ## Useful links
 

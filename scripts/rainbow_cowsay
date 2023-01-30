@@ -12,7 +12,7 @@
 
 input=("$@")
 
-main(){
+main() {
     # Store command output in array: https://stackoverflow.com/a/11426834
     local options=( "$(
         # List all "cowsay" options
