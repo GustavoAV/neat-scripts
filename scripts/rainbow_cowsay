@@ -8,25 +8,25 @@
 #   Use the examples below and see the magic happen:
 #   ./rainbow-cowsay echo -n "Hello World!"
 #   ./rainbow-cowsay fortune
-#    To make it run whenever you open your terminal, put a line with a call to this script at the end of your "~/.bashrc", close and open your terminal.
+#    To make it run whenever you open your terminal, put a line with a call to this script at the end of your "~/.bashrc".
 
-input="$@"
+input=("$@")
 
 main(){
     # Store command output in array: https://stackoverflow.com/a/11426834
-    readonly options=( $(
+    local options=( "$(
         # List all "cowsay" options
-        for file in $(ls /usr/share/cowsay/cows/); do
+        for file in /usr/share/cowsay/cows/*.cow; do
             # Remove ".cow" from the files names
             basename "$file" .cow
         done
-    ) )
+    )" )
 
     # Select random item of array in bash: https://stackoverflow.com/a/2388555
-    readonly random_option="${options[ $RANDOM % ${#options[@]} ]}"
+    local random_option="${options[ $RANDOM % ${#options[@]} ]}"
 
     # Make your input *~fabulous~*
-    $input | cowsay -f "$random_option" | lolcat
+    "${input[@]}" | cowsay -f "$random_option" | lolcat
 }
 
 main
