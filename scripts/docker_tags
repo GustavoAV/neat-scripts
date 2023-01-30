@@ -22,14 +22,6 @@ fi
 
 url="https://registry.hub.docker.com/v2/repositories/$repository/tags/?page_size=100"
 
-# Save python script to temporary file
-cat << 'EOF' > /tmp/json_process.py
-import sys, json
-data = json.load(sys.stdin)
-print(data.get("next", "") or "")
-print("\n".join([x["name"] for x in data["results"]]))
-EOF
-
 dependencies_check() {
     # Is "curl" or "wget" available?
     if command -v curl &>/dev/null; then
@@ -52,15 +44,23 @@ dependencies_check() {
     fi
 }
 
+# Save python script to temporary file
+cat << 'EOF' > /tmp/json_process.py
+import sys, json
+data = json.load(sys.stdin)
+print(data.get("next", "") or "")
+print("\n".join([x["name"] for x in data["results"]]))
+EOF
+
 main() {
     (
         # Keep looping until the variable URL is empty
-        while [ ! -z $url ]; do
+        while [[ -n $url ]]; do
             # Every iteration of the loop prints out a single dot to show progress as it got through all the pages (this is inline dot)
             >&2 echo -n "."
             # Curl the URL and pipe the output to Python. Python will parse the JSON and print the very first line as the next URL (it will leave it blank if there are no more pages)
             # then continue to loop over the results extracting only the name; all will be stored in a variable called content
-            content=$( $download_cmd $url | $py_bin /tmp/json_process.py )
+            content=$( $download_cmd "$url" | $py_bin /tmp/json_process.py )
             # Let's get the first line of content which contains the next URL for the loop to continue
             url=$(echo "$content" | head -n 1)
             # Print the content without the first line (yes +2 is counter intuitive)
