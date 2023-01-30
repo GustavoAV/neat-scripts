@@ -5,7 +5,7 @@
 #   Retries twice if the install fails to avoid failing because of unstable network.
 #   You should use this mainly in Docker builds to easily get smaller final images.
 # USAGE:
-#   install_packages <package_1> <package_2> ... <package_n>
+#   install_pkgs <package_1> <package_2> ... <package_n>
 # BASED ON:
 #   https://github.com/bitnami/containers/blob/main/bitnami/nginx/1.23/debian-11/prebuildfs/usr/sbin/install_packages
 
@@ -30,6 +30,7 @@ until [ $n -gt $max ]; do
         exit $CODE
     fi
     echo "apt failed, retrying"
-    n=$(($n + 1))
+    n=$((n + 1))
 done
+
 apt-get clean && rm -rf /var/lib/apt/lists /var/cache/apt/archives
