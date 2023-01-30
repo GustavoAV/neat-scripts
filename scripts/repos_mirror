@@ -13,12 +13,12 @@ dest_group_url="$1"
 if [[ -e "source_project_list.txt" ]]; then
     source_project_list="$(cat source_project_list.txt)"
 else
-    echo "You have to create the 'source_project_list.txt' file first!"
+    echo "You have to create the 'source_project_list.txt' file first!" >&2
     exit 1
 fi
 
 main() {
-    for project in "$source_project_list"; do
+    for project in $source_project_list; do
 
         source_project_url="$project"
         # Get project name only, removing ".git" if present
@@ -47,7 +47,9 @@ main() {
 
         git push
         cd ../
-        rm -rf ${project_name}/
+
+        # Question mark avoids incorrectly evaluating as "/"
+        rm -rf "${project_name:?}/"
 
         done
 
