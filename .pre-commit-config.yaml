@@ -10,9 +10,12 @@ repos:
     - id: detect-private-key
     - id: end-of-file-fixer
     - id: trailing-whitespace
-
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
     rev: 3.0.0
     hooks:
     - id: script-must-not-have-extension
+  - repo: https://github.com/koalaman/shellcheck-precommit
+    rev: v0.9.0
+    hooks:
     - id: shellcheck
+      # args: ["--severity=warning"]  # Optionally only show errors and warnings
