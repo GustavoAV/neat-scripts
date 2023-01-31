@@ -17,10 +17,6 @@ List of tasks (features or fixes) that I'm supposed to do in the scripts and the
 - [ ] Create `apt-get` version
 - [ ] Create `yum` version
 
-## [install_pkgs_yum](./scripts/install_pkgs_yum)
-
-- [ ] Create `install_pkgs_yum` version
-
 ## Miscelaneous
 
 - [ ] Create test environment

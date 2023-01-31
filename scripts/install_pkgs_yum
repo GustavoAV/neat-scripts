@@ -1,0 +1,34 @@
+#!/bin/sh
+
+# DESCRIPTION:
+#   Install packages via "yum" and remove useless stuff.
+#   Retries twice if the install fails to avoid failing because of unstable network.
+#   You should use this mainly in Docker builds to easily get smaller final images.
+# USAGE:
+#   install_pkgs <package_1> <package_2> ... <package_n>
+# BASED ON:
+#   https://github.com/bitnami/containers/blob/main/bitnami/nginx/1.23/debian-11/prebuildfs/usr/sbin/install_packages
+
+set -eu
+
+n=0
+max=2
+
+until [ $n -gt $max ]; do
+    set +e
+    (
+      yum install -y --setopt=tsflags=nodocs "$@"
+    )
+    CODE=$?
+    set -e
+    if [ $CODE -eq 0 ]; then
+        break
+    fi
+    if [ $n -eq $max ]; then
+        exit $CODE
+    fi
+    echo "yum failed, retrying"
+    n=$((n + 1))
+done
+
+yum clean all -y && rm -rf /var/cache/yum
