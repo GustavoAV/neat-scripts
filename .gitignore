@@ -4,6 +4,7 @@
 HELP.md
 Dockerfile
 Dockerfile-*
+*.txt
 
 ###################
 # Compiled source #

@@ -7,6 +7,7 @@
 #   repos-mirror <dest-repo>
 
 set -euo pipefail
+if [[ "${TRACE-0}" == "1" ]]; then set -o xtrace; fi
 
 dest_group_url="$1"
 
@@ -22,11 +23,7 @@ main() {
 
         source_project_url="$project"
         # Get project name only, removing ".git" if present
-        project_name="$(
-            basename
-                "$source_project_url"
-                ".${source_project_url##*.}"
-        )"
+        project_name=$(basename "$source_project_url" .git)
 
         # On the first iteration, clones base project
         # On the second, clones the wiki
