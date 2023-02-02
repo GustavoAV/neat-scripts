@@ -9,8 +9,8 @@ List of tasks (features or fixes) that I'm supposed to do in the scripts and the
 
 ## [repos_mirror](./scripts/repos_mirror)
 
-- [ ] Test with Github repos (only used it in Gitlab)
 - [ ] Get all projects of said repository via API
+- [ ] Use `pwd` to better adress directories
 
 ## [standalone_envsubst](./scripts/standalone_envsubst)
 

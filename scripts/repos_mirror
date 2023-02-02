@@ -4,7 +4,7 @@
 #   Clone and pushes git projects and their wikis to another repository.
 # USAGE:
 #   Create and fill "source_project_list.txt" with the projects url list and then run:
-#   repos-mirror <dest-repo>
+#   repos-mirror <dest-group-url>
 
 set -euo pipefail
 if [[ "${TRACE-0}" == "1" ]]; then set -o xtrace; fi
@@ -19,34 +19,42 @@ else
 fi
 
 main() {
-    for project in $source_project_list; do
+    for source_project_url in $source_project_list; do
 
-        source_project_url="$project"
         # Get project name only, removing ".git" if present
         project_name=$(basename "$source_project_url" .git)
 
         # On the first iteration, clones base project
         # On the second, clones the wiki
-        for i in 1 2; do
+        for type in "base" "wiki"; do
 
-            if [[ "$i" == 2 ]]; then
+            if [[ "$type" == "wiki" ]]; then
                 source_project_url="$source_project_url.wiki"
                 project_name="$project_name.wiki"
             fi
 
-        echo "Cloning $project_name from source repository..."
+            echo -e "\nCloning $project_name from source repository..."
+            git clone --mirror --quiet "$source_project_url"
 
-        git clone --quiet "$source_project_url"
-        cd "$project_name"
-        git remote set-url origin "$dest_group_url/$project_name"
+            cd "$project_name.git"
 
-        echo "Sending $project_name to destiny repository..."
+            if [[ "$type" == "base" ]]; then
+                # Remove uneeded and platform specific git objects
+                git show-ref | \
+                    cut -d ' ' -f2 | \
+                    grep -e 'pull' -e 'merge-requests' -e 'environments' | \
+                    xargs -r -L1 git update-ref -d || \
+                    true
+            fi
 
-        git push
-        cd ../
+            git remote set-url origin "$dest_group_url/$project_name"
 
-        # Question mark avoids incorrectly evaluating as "/"
-        rm -rf "${project_name:?}/"
+            echo "Sending $project_name to destiny repository..."
+            git push --set-upstream origin > /dev/null
+
+            cd ../
+            # Question mark avoids incorrectly evaluating as "/"
+            rm -rf "${project_name:?}.git/"
 
         done
 
