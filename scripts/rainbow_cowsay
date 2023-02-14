@@ -10,7 +10,7 @@
 #   ./rainbow-cowsay fortune
 #    To make it run whenever you open your terminal, put a line with a call to this script at the end of your "~/.bashrc".
 
-cows="( $(cowsay -l | sed '1d') )"
+cows=( $(cowsay -l | sed '1d') )
 
 # Select random item of array in bash: https://stackoverflow.com/a/2388555
 random_cow=${cows[$RANDOM % ${#cows[@]}]}
