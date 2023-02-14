@@ -17,7 +17,7 @@ max=2
 until [ $n -gt $max ]; do
     set +e
     (
-      yum install -y --setopt=tsflags=nodocs "$@"
+        yum install -y --setopt=tsflags=nodocs "$@"
     )
     CODE=$?
     set -e
