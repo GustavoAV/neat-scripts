@@ -5,6 +5,14 @@ Collection of cool and/or useful scripts that I seldom use.
 > These weren't heavily tested.
 > Their use in production or automated environments is **not** recommended.
 
+## Table of Contents
+
+- [Neat Scripts](#neat-scripts)
+  - [Table of Contents](#table-of-contents)
+  - [Usage](#usage)
+  - [Development](#development)
+  - [Useful links](#useful-links)
+
 ## Usage
 
 To run the scripts, you have to clone this project and execute:
@@ -33,6 +41,7 @@ There is a simple template for new scripts:
 #   https://foo.bar/question
 
 set -euo pipefail
+if [[ "${TRACE-0}" == "1" ]]; then set -o xtrace; fi
 
 main() {
     # Here goes the code

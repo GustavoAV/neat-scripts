@@ -2,6 +2,13 @@
 
 This contains some simpler commands, not scripts, that are helpful.
 
+## Table of Contents
+
+- [One Liners](#one-liners)
+  - [Table of Contents](#table-of-contents)
+  - [lsb\_release alternative](#lsb_release-alternative)
+  - [HTTP responde status code only](#http-responde-status-code-only)
+
 ## lsb_release alternative
 
 In install tutorials, it's common to have `lsb_release -cs` to get the Distro codename like "jammy", "bullseye" or sth like this.However, in Linux Mint, this returns Mint's codename, for which most repositories don't contain specific versions. This command gets the relative Ubuntu version in which Mint is based.
