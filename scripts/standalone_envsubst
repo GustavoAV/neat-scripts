@@ -28,7 +28,7 @@ runDeps="$(
 )"
 
 # Delete "gettext" completely
-apk add --no-cache "$runDeps"
+apk add --no-cache $runDeps
 apk del .gettext
 
 # Move "envsubst" back
