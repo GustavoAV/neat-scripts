@@ -17,8 +17,8 @@ Run Maven via Docker, mapping your current path to the container and reusing you
 ```bash
 docker run --rm \
   -e MAVEN_CONFIG=/var/maven/.m2 \
-  -u $$(id -u):$$(id -g) \
-  -v $(PWD):/app \
+  -u $(id -u):$(id -g) \
+  -v $(pwd):/app \
   -v ~/.m2/:/var/maven/.m2/ \
   -w /app \
   maven:3.9.0-eclipse-temurin-11 \
@@ -35,7 +35,7 @@ codename=$(sed --quiet "s/UBUNTU_CODENAME=//p" /etc/os-release)
 
 ## HTTP responde status code only
 
-Gets only the status code of a http request. You can use this to, for example, check if your repository already contains some component.
+Gets only the status code of a http request. You can use this in a script to, for example, check if your repository already contains some component.
 
 ```bash
 status_code=$(
