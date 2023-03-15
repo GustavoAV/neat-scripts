@@ -20,7 +20,7 @@ Collection of cool and/or useful scripts that I seldom use.
 
 To run the scripts, you have to clone this project and execute:
 
-```console
+```bash
 chmod +x <filename>           # Give executable permissions to the file
 ./<filename>                  # Run the script
 
@@ -36,13 +36,13 @@ mv <filename> /usr/local/bin/ # If you want to make it available system wide
 You should use [pre-commit](https://pre-commit.com/) to auto verify your code
 before commiting. You can install the tool with:
 
-```console
+```bash
 python3 -m pip install --user pre-commit
 ```
 
 After this, run:
 
-```console
+```bash
 pre-commit install
 ```
 
@@ -52,7 +52,7 @@ Now, pre-commit will run some hooks on every commit!
 
 There is a simple template for new scripts:
 
-```console
+```bash
 #!/bin/bash
 
 # DESCRIPTION:
@@ -78,7 +78,7 @@ exit 0
 
 To test the scripts, you need [Docker](https://docs.docker.com/engine/install/), [Make](https://www.gnu.org/software/make/) and then run:
 
-```console
+```bash
 make <script-name>
 ```
 
