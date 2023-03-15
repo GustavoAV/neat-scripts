@@ -19,5 +19,4 @@ List of tasks (features or fixes) that I'm supposed to do in the scripts and the
 
 ## Miscelaneous
 
-- [ ] Create test environment
 - [ ] Add usage section in scripts
