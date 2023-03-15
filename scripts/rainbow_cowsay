@@ -6,8 +6,8 @@
 #   Here's the Github to it: https://github.com/busyloop/lolcat
 # USAGE:
 #   Use the examples below and see the magic happen:
-#   ./rainbow-cowsay echo -n "Hello World!"
-#   ./rainbow-cowsay fortune
+#   ./rainbow_cowsay echo -n "Hello World!"
+#   ./rainbow_cowsay fortune
 #    To make it run whenever you open your terminal, put a line with a call to this script at the end of your "~/.bashrc".
 
 cows=( $(cowsay -l | sed '1d') )
