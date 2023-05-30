@@ -11,9 +11,9 @@ Collection of cool and/or useful scripts that I seldom use.
   - [Table of Contents](#table-of-contents)
   - [Usage](#usage)
   - [Development](#development)
-    - [Pre-commit](#pre-commit)
     - [Template](#template)
     - [Testing](#testing)
+    - [Trunk.io](#trunkio)
   - [Useful links](#useful-links)
 
 ## Usage
@@ -30,23 +30,6 @@ mv <filename> /usr/local/bin/ # If you want to make it available system wide
 > Note that these can only run in *nix environments (and maybe WSL, dunno).
 
 ## Development
-
-### Pre-commit
-
-You should use [pre-commit](https://pre-commit.com/) to auto verify your code
-before commiting. You can install the tool with:
-
-```bash
-python3 -m pip install --user pre-commit
-```
-
-After this, run:
-
-```bash
-pre-commit install
-```
-
-Now, pre-commit will run some hooks on every commit!
 
 ### Template
 
@@ -83,6 +66,12 @@ make <script-name>
 ```
 
 Optionally, you can run only `make` (with no arguments) to test all scripts.
+
+### Trunk.io
+
+We recommend [Trunk.io](https://github.com/trunk-io) toolkit to auto format and verify your code.
+
+If you already have it installed, it's gonna detect and use this project `.trunk/` personalized configs.
 
 ## Useful links
 

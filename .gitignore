@@ -1,10 +1,7 @@
 #################
 # Miscellaneous #
 #################
-HELP.md
-Dockerfile
-Dockerfile-*
-*.txt
+.vscode
 
 ###################
 # Compiled source #
