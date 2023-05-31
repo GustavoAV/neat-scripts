@@ -1,6 +1,6 @@
 DOCKER_OPTS=-ti --rm -v $(PWD)/scripts:/app -w /app
 
-INSTALL_PKGS_CMDS=/bin/bash -c " \
+INSTALL_PKGS_CMDS=/bin/sh -c " \
 	./install_pkgs.sh git tree \
 	&& git --version \
 	&& tree --version \
@@ -10,7 +10,7 @@ all: docker_tags.sh install_pkgs.sh standalone_envsubst.sh
 
 .PHONY: docker_tags.sh
 docker_tags.sh:
-	docker run $(DOCKER_OPTS) python:3.11.2-bullseye /bin/bash -c "./$@ alpine"
+	docker run $(DOCKER_OPTS) python:3.11.2-bullseye /bin/sh -c "./$@ alpine"
 
 .PHONY: install_pkgs.sh
 install_pkgs.sh:
