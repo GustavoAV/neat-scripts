@@ -17,21 +17,37 @@ max=2
 # Selects package manager and respective commands
 
 if command -v apt-get > /dev/null 2>&1; then
-    export DEBIAN_FRONTEND=noninteractive
-    install='apt-get update -qq && apt-get install -y --no-install-recommends $@'
-    clean='apt-get clean && rm -rf /var/lib/apt/lists /var/cache/apt/archives'
+    install=' \
+        DEBIAN_FRONTEND=noninteractive \
+        && apt-get update -qq \
+        && apt-get install -y --no-install-recommends $@ \
+    '
+    clean=' \
+        apt-get clean \
+        && rm -rf /var/lib/apt/lists /var/cache/apt/archives \
+    '
 elif command -v pacman > /dev/null 2>&1; then
-    install='pacman -Sy --needed --noconfirm $@'
-    clean='pacman -Scc --noconfirm && rm -rf /var/cache/pacman/pkg/*'
+    install=' \
+        pacman -Sy --needed --noconfirm $@ \
+    '
+    clean=' \
+        pacman -Scc --noconfirm \
+        && rm -rf /var/cache/pacman/pkg/* \
+    '
 elif command -v yum > /dev/null 2>&1; then
-    install='yum install -y --setopt=tsflags=nodocs $@'
-    clean='yum clean all -y && rm -rf /var/cache/yum'
+    install=' \
+        yum install -y --setopt=tsflags=nodocs $@ \
+    '
+    clean=' \
+        yum clean all -y \
+        && rm -rf /var/cache/yum \
+    '
 else
     echo "Your package manager is not supported!" >&2
     exit 1
 fi
 
-# Runs install. Retries if fails.
+# Runs install retrying if fails.
 
 until [ $n -gt $max ]; do
     set +e
