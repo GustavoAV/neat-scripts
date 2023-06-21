@@ -18,7 +18,7 @@ find_args=(-type f -name "*.cow")
 
 # You can add cow exceptions separated by space if needed
 # "kiss" is already there because it's kinda awkward
-exception_list=(kiss duck)
+exception_list=(kiss)
 
 # Add cow exceptions to find
 for exception in "${exception_list[@]}"; do
