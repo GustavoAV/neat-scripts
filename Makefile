@@ -1,10 +1,5 @@
 DOCKER_OPTS=-ti --rm -v $(PWD)/scripts:/app -w /app
-
-INSTALL_PKGS_CMDS=/bin/sh -c " \
-	./install_pkgs.sh git tree \
-	&& git --version \
-	&& tree --version \
-	"
+INSTALL_PKGS_CMDS=/bin/sh -c "./install_pkgs.sh tree && tree --version"
 
 all: docker_tags.sh install_pkgs.sh standalone_envsubst.sh
 
