@@ -14,56 +14,57 @@ set -eu
 n=0
 max=2
 
-# Selects package manager and respective commands
+pkg_mgr_list="apt-get yum pacman"
 
-if command -v apt-get > /dev/null 2>&1; then
-    install=' \
-        DEBIAN_FRONTEND=noninteractive \
-        && apt-get update -qq \
-        && apt-get install -y --no-install-recommends $@ \
-    '
-    clean=' \
-        apt-get clean \
-        && rm -rf /var/lib/apt/lists /var/cache/apt/archives \
-    '
-elif command -v pacman > /dev/null 2>&1; then
-    install=' \
-        pacman -Sy --needed --noconfirm $@ \
-    '
-    clean=' \
-        pacman -Scc --noconfirm \
-        && rm -rf /var/cache/pacman/pkg/* \
-    '
-elif command -v yum > /dev/null 2>&1; then
-    install=' \
-        yum install -y --setopt=tsflags=nodocs $@ \
-    '
-    clean=' \
-        yum clean all -y \
-        && rm -rf /var/cache/yum \
-    '
-else
-    echo "Your package manager is not supported!" >&2
-    exit 1
-fi
+# Checks available package manager
+check_pkg_mgr() {
+	for pkg_mgr in $pkg_mgr_list; do
+		if command -v "$pkg_mgr" >/dev/null 2>&1; then
+			echo "$pkg_mgr"
+			return
+		fi
+	done
 
-# Runs install retrying if fails.
+	echo "Your package manager is not supported!" >&2
+	exit 1
+}
 
+# Populates "install" and "clean" vars
+case $(check_pkg_mgr) in
+apt-get)
+	install='DEBIAN_FRONTEND=noninteractive \
+            && apt-get update -qq \
+            && apt-get install -y --no-install-recommends $@'
+	clean='apt-get clean \
+            && rm -rf /var/lib/apt/lists /var/cache/apt/archives'
+	;;
+yum)
+	install='yum install -y --setopt=tsflags=nodocs $@'
+	clean='yum clean all -y \
+            && rm -rf /var/cache/yum'
+	;;
+pacman)
+	install='pacman -Sy --needed --noconfirm $@'
+	clean='pacman -Scc --noconfirm && \
+            rm -rf /var/cache/pacman/pkg/*'
+	;;
+esac
+
+# Runs install retrying if fails
 until [ $n -gt $max ]; do
-    set +e
-    ( eval "$install" )
-    code=$?
-    set -e
-    if [ $code -eq 0 ]; then
-        break
-    fi
-    if [ $n -eq $max ]; then
-        exit $code
-    fi
-    echo "Install failed, retrying"
-    n=$((n + 1))
+	set +e
+	(eval "$install")
+	code=$?
+	set -e
+	if [ $code -eq 0 ]; then
+		break
+	fi
+	if [ $n -eq $max ]; then
+		exit $code
+	fi
+	echo "Install failed, retrying..."
+	n=$((n + 1))
 done
 
 # Removes package manager trash
-
 eval "$clean"
