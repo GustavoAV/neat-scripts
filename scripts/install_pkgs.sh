@@ -70,3 +70,5 @@ done
 
 # Removes package manager trash
 eval "$clean"
+
+exit 0
