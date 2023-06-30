@@ -7,7 +7,7 @@ This contains some simpler commands, not scripts, that are helpful.
 - [One Liners](#one-liners)
   - [Table of Contents](#table-of-contents)
   - [Maven via Docker](#maven-via-docker)
-  - [lsb\_release alternative](#lsb_release-alternative)
+  - [lsb_release alternative](#lsb_release-alternative)
   - [HTTP responde status code only](#http-responde-status-code-only)
 
 ## Maven via Docker
