@@ -9,6 +9,7 @@ This contains some simpler commands, not scripts, that are helpful.
   - [Maven via Docker](#maven-via-docker)
   - [lsb_release alternative](#lsb_release-alternative)
   - [HTTP responde status code only](#http-responde-status-code-only)
+  - [Create SSH Key without prompt](#create-ssh-key-without-prompt)
 
 ## Maven via Docker
 
@@ -49,4 +50,14 @@ status_code=$(
     --write-out "%{http_code}"
     "https://${CI_REPOSITORY}/repository/maven-releases/foo/bar.jar"
 )
+```
+
+## Create SSH Key without prompt
+
+This creates a ssh key pair with `ssh-keygen` with no passphrase, prompt and output.
+
+Note that this is objectively not apropriate for production environments, just for development in your machine.
+
+```bash
+cat /dev/zero | ssh-keygen -f ./sample_rsa -C "sample" -q -N ""
 ```
