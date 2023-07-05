@@ -2,8 +2,8 @@
 
 # DESCRIPTION
 #   Runs ansible playbooks twice and check if there are changes.
-#   First argument is the inventory file.
-#   All the others are ansible-playbook arguments.
+#   First argument is the inventory file. It needs to use ungrouped ini format.
+#   All the others arguments are ansible-playbook arguments.
 # USAGE
 #   ./idempotency_check.sh inventory_file [ansible_opts] playbook
 
@@ -18,7 +18,7 @@ shift
 printf "" >"$log_file"
 
 # Runs playbook logging to file
-for i in $(seq "$play_count"); do
+for _i in $(seq "$play_count"); do
     ANSIBLE_LOG_PATH="$log_file" ansible-playbook "$@"
 done
 
