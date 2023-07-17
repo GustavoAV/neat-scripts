@@ -12,40 +12,37 @@
 
 set -euo pipefail
 
+user=$(whoami)
+# Get current user GECOS: https://stackoverflow.com/a/833235
+user_fullname=$(getent passwd "$user" | cut -d ':' -f 5)
+pip_pkgs_path="$HOME/.local/bin"
+
+if [ $# -gt 0 ]; then
+    # Use provided args if present
+    cow_string="$*"
+else
+    # Default string
+    cow_string="Hello, $user_fullname!"
+fi
+
 dependencies_check() {
     for dependency in "$@"; do
-        if ! command -v "${dependency}" > /dev/null 2>&1; then
-            echo "${dependency} is not installed!" >&2
-            exit 1
+        if [ ! -x "$pip_pkgs_path/$dependency" ]; then
+            echo "$dependency is not available!" >&2
+            exit 0
         fi
     done
 }
 
+random_cowtput() {
+    python3 -c \
+        "import cowsay, random; \
+        random_cow = random.choice(cowsay.char_names); \
+        cowtput = cowsay.get_output_string(random_cow, '$cow_string'); \
+        print(cowtput)"
+}
+
 dependencies_check cowsay lolcat
-
-cows_dir=/usr/share/cowsay/cows/
-find_args=(-type f -name "*.cow")
-
-# You can add cow exceptions separated by space if needed
-# "kiss" is already there because it's kinda awkward
-exception_list=(kiss)
-
-# Add cow exceptions to find
-for exception in "${exception_list[@]}"; do
-    find_args+=(! -name "$exception".cow)
-done
-
-# Select random cow
-random_cow_file=$(find ${cows_dir} "${find_args[@]}" | shuf -n 1)
-
-# Remove extension
-random_cow=$(basename "${random_cow_file}" .cow)
-
-# When provided arguments, echoes the input
-if [[ $# -gt 0 ]]; then
-    echo "$@" | cowsay -f "$random_cow" | lolcat
-else
-    fortune -s | cowsay -f "$random_cow" | lolcat
-fi
+random_cowtput | lolcat
 
 exit 0
