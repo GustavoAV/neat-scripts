@@ -2,8 +2,7 @@
 
 # DESCRIPTION:
 #   Print a "rainbow coloured random cowsay option" saying something.
-#   Note that you need "lolcat" installed to run this. In newer Ubuntu versions, it's in the standard apt repository.
-#   Here's the Github to it: https://github.com/busyloop/lolcat
+#   You can install the dependencies with "pip install --user cowsay lolcat"
 # USAGE:
 #   Use the examples below and see the magic happen:
 #   ./rainbow_cowsay
