@@ -7,26 +7,24 @@
 #   Use the examples below and see the magic happen:
 #   ./rainbow_cowsay
 #   ./rainbow_cowsay Hello World!
-#    To make it run whenever you open your terminal, put a line with a call to this script at the end of your "~/.bashrc".
+#   To make it run whenever you open your terminal, put a line with a call to this script at the end of your "~/.bashrc".
 
 set -euo pipefail
 
-user=$(whoami)
-# Get current user GECOS: https://stackoverflow.com/a/833235
-user_fullname=$(getent passwd "$user" | cut -d ':' -f 5)
-pip_pkgs_path="$HOME/.local/bin"
-
+# If present, use provided cli args
+# Else, get user name
 if [ $# -gt 0 ]; then
-    # Use provided args if present
     cow_string="$*"
 else
-    # Default string
+    user=$(whoami)
+    # Get current user GECOS: https://stackoverflow.com/a/833235
+    user_fullname=$(getent passwd "$user" | cut --delimiter=':' --fields=5)
     cow_string="Hello, $user_fullname!"
 fi
 
 dependencies_check() {
     for dependency in "$@"; do
-        if [ ! -x "$pip_pkgs_path/$dependency" ]; then
+        if ! command -v "$dependency" >/dev/null 2>&1; then
             echo "$dependency is not available!" >&2
             exit 0
         fi
