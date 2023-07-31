@@ -28,6 +28,7 @@ runDeps="$(
 )"
 
 # Delete "gettext" completely
+# trunk-ignore(shellcheck/SC2086)
 apk add --no-cache $runDeps
 apk del .gettext
 
