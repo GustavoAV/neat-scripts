@@ -8,5 +8,5 @@ plugins:
       ref: v1.0.0
       uri: https://github.com/trunk-io/plugins
     - id: configs
-      ref: e01520d
+      ref: v0.0.1
       uri: https://github.com/GustavoAV/trunk-configs
