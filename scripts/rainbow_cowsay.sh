@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # DESCRIPTION:
 #   Print a "rainbow coloured random cowsay option" saying something.
@@ -11,35 +11,45 @@
 
 set -euo pipefail
 
-# If present, use provided cli args
-# Else, get user name
-if [ $# -gt 0 ]; then
-    cow_string="$*"
-else
-    user=$(whoami)
-    # Get current user GECOS: https://stackoverflow.com/a/833235
-    user_fullname=$(getent passwd "$user" | cut --delimiter=':' --fields=5)
-    cow_string="Hello, $user_fullname!"
-fi
-
 dependencies_check() {
     for dependency in "$@"; do
         if ! command -v "$dependency" >/dev/null 2>&1; then
             echo "$dependency is not available!" >&2
-            exit 0
+            exit 1
         fi
     done
 }
 
-random_cowtput() {
+user_fullname() {
+    local user gecos
+
+    user=$(whoami)
+    # Get current user GECOS: https://stackoverflow.com/a/833235
+    gecos=$(getent passwd "$user" | cut --delimiter=':' --fields=5)
+    echo "$gecos"
+}
+
+random_cowsay() {
+    local input
+
+    input=$*
     python3 -c \
         "import cowsay, random; \
         random_cow = random.choice(cowsay.char_names); \
-        cowtput = cowsay.get_output_string(random_cow, '$cow_string'); \
+        cowtput = cowsay.get_output_string(random_cow, '$input'); \
         print(cowtput)"
 }
 
 dependencies_check cowsay lolcat
-random_cowtput | lolcat
+
+# If present, use provided cli args
+# Else, get user name
+if [ $# -gt 0 ]; then
+    cow_text="$*"
+else
+    cow_text="Hello, $(user_fullname)"
+fi
+
+random_cowsay "$cow_text" | lolcat
 
 exit 0
