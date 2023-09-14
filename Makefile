@@ -6,24 +6,17 @@ CENTOS_IMAGE := centos:7
 DEBIAN_IMAGE := debian:bullseye-slim
 PYTHON_IMAGE := python:3.11.4-bookworm
 
-all: docker_tags.sh install_pkgs.sh rainbow_cowsay.sh standalone_envsubst.sh
+all: docker_tags install_pkgs random_cowsay standalone_envsubst
 
-.PHONY: docker_tags.sh
-docker_tags.sh:
+.PHONY: docker_tags
+docker_tags:
 	$(DOCKER_RUN) $(PYTHON_IMAGE) ./$@ alpine
 
-.PHONY: install_pkgs.sh
-install_pkgs.sh:
+.PHONY: install_pkgs
+install_pkgs:
 	$(DOCKER_RUN) $(DEBIAN_IMAGE) ./$@ tree
 	$(DOCKER_RUN) $(ARCHLINUX_IMAGE) ./$@ tree
 	$(DOCKER_RUN) $(CENTOS_IMAGE) ./$@ tree
-
-.PHONY: rainbow_cowsay.sh
-rainbow_cowsay.sh:
-	$(DOCKER_RUN) $(PYTHON_IMAGE) /bin/bash -c ' \
-		export PATH="$$HOME/.local/bin/:$$PATH" \
-		&& pip install --user cowsay lolcat \
-		&& ./$@'
 
 .PHONY: random_cowsay
 random_cowsay:
@@ -32,6 +25,6 @@ random_cowsay:
 		&& pip install --user cowsay lolcat \
 		&& ./$@ | lolcat'
 
-.PHONY: standalone_envsubst.sh
-standalone_envsubst.sh:
+.PHONY: standalone_envsubst
+standalone_envsubst:
 	$(DOCKER_RUN) $(ALPINE_IMAGE) /bin/sh -c "./$@ && envsubst --version"
