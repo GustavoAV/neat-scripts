@@ -13,7 +13,8 @@ USAGE
   random_cowsay "Hello World!" | lolcat
 
 TIP
-  To make it run whenever you open your terminal, put a line with a call to this script at the end of your "~/.bashrc".
+  To make it run whenever you open your terminal, put a line with a call to
+  this script at the end of your "~/.bashrc".
 """
 
 import os
@@ -21,17 +22,18 @@ import pwd
 import random
 import sys
 
+# trunk-ignore(pylint/E0401)
 import cowsay
 
 
 def user_full_name():
     """
-    Get current os user full name
+    Get current OS user full name
     Based on: https://stackoverflow.com/a/15031204
     """
     uid = os.getuid()
-    user_data = pwd.getpwuid(uid)
-    full_name = user_data.pw_gecos.split(",")[0]
+    user_info = pwd.getpwuid(uid)
+    full_name = user_info.pw_gecos.split(",")[0]
     return full_name
 
 
@@ -55,5 +57,5 @@ def main(arg_list):
 
 
 if __name__ == "__main__":
-    # We discard "sys.argv[0]" since it's the script name
+    # Ignore "sys.argv[0]" since it's the script name
     main(sys.argv[1:])
