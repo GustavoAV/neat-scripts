@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+
+"""
+DESCRIPTION
+  Prints a random cowsay option saying something.
+  Use it with lolcat to make things look *~fabulous~*.
+  You can install the dependencies with "pip install --user cowsay lolcat"
+
+USAGE
+  random_cowsay
+  random_cowsay | lolcat
+  random_cowsay "Hello World!"
+  random_cowsay "Hello World!" | lolcat
+
+TIP
+  To make it run whenever you open your terminal, put a line with a call to this script at the end of your "~/.bashrc".
+"""
+
+import os
+import pwd
+import random
+import sys
+
+import cowsay
+
+
+def user_full_name():
+    """
+    Get current os user full name
+    Based on: https://stackoverflow.com/a/15031204
+    """
+    uid = os.getuid()
+    user_data = pwd.getpwuid(uid)
+    full_name = user_data.pw_gecos.split(",")[0]
+    return full_name
+
+
+def main(arg_list):
+    """
+    Prints random cowsay
+
+    If provided, use cli args as the text
+    Else, gets user full name
+    """
+    if len(arg_list) > 0:
+        cow_string = " ".join(arg_list)
+    else:
+        cow_string = f"Hello, {user_full_name()}!"
+
+    # trunk-ignore(bandit/B311)
+    random_cow = random.choice(cowsay.char_names)
+    cowtput = cowsay.get_output_string(random_cow, cow_string)
+
+    print(cowtput)
+
+
+if __name__ == "__main__":
+    # We discard "sys.argv[0]" since it's the script name
+    main(sys.argv[1:])

@@ -25,6 +25,13 @@ rainbow_cowsay.sh:
 		&& pip install --user cowsay lolcat \
 		&& ./$@'
 
+.PHONY: random_cowsay
+random_cowsay:
+	$(DOCKER_RUN) $(PYTHON_IMAGE) /bin/bash -c ' \
+		export PATH="$$HOME/.local/bin/:$$PATH" \
+		&& pip install --user cowsay lolcat \
+		&& ./$@ | lolcat'
+
 .PHONY: standalone_envsubst.sh
 standalone_envsubst.sh:
 	$(DOCKER_RUN) $(ALPINE_IMAGE) /bin/sh -c "./$@ && envsubst --version"
