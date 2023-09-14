@@ -3,7 +3,7 @@ DOCKER_RUN := docker run -ti --rm -v $(PWD)/scripts:/app -w /app
 ALPINE_IMAGE := alpine:3.17.2
 ARCHLINUX_IMAGE := archlinux:base
 CENTOS_IMAGE := centos:7
-DEBIAN_IMAGE := debian:bullseye-slim
+DEBIAN_IMAGE := debian:bookworm-slim
 PYTHON_IMAGE := python:3.11.4-bookworm
 
 all: docker_tags install_pkgs random_cowsay standalone_envsubst
