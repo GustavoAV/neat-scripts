@@ -14,17 +14,19 @@ Collection of cool and/or useful scripts that I seldom use.
     - [Template](#template)
     - [Testing](#testing)
     - [Trunk.io](#trunkio)
-  - [Useful links](#useful-links)
+  - [References](#references)
 
 ## Usage
 
-To run the scripts, you have to clone this project and execute:
+To run the scripts, you need to clone this project and execute:
 
 ```bash
-chmod +x <filename>           # Give executable permissions to the file
-./<filename>                  # Run the script
+cd scripts/
+chmod +x <filename>  # Give executable permissions to the file
+./<filename>         # Run the script
 
-mv <filename> /usr/local/bin/ # If you want to make it available system wide
+# If you want to make it available system wide
+sudo mv <filename> /usr/local/bin/
 ```
 
 > Note that these can only run in *nix environments (and maybe WSL, dunno).
@@ -36,7 +38,7 @@ mv <filename> /usr/local/bin/ # If you want to make it available system wide
 There is a simple template for new scripts:
 
 ```bash
-#!/bin/bash
+#!/usr/bin/env bash
 
 # DESCRIPTION:
 #   Small description of the script purpose.
@@ -73,6 +75,6 @@ We recommend [Trunk.io](https://github.com/trunk-io) toolkit to auto format and 
 
 If you already have it installed, it's gonna detect and use this project `.trunk/` personalized configs.
 
-## Useful links
+## References
 
 Generic tips for writing Shell Scripts: [progrium/bashstyle](https://github.com/progrium/bashstyle)

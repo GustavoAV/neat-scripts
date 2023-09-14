@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # DESCRIPTION:
 #   Clone and pushes git projects and their wikis to another repository.
 # USAGE:
 #   Create and fill "source_project_list.txt" with the projects url list and then run:
-#   repos-mirror <dest-group-url>
+#   repos_mirror <dest-group-url>
 
 set -euo pipefail
 if [[ ${TRACE-0} == "1" ]]; then set -o xtrace; fi

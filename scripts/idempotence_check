@@ -1,13 +1,13 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # DESCRIPTION
 #   Runs ansible playbooks twice and check if there are changes.
 #   First argument is the inventory file. It needs to use ungrouped ini format.
 #   All the others arguments are ansible-playbook arguments.
 # USAGE
-#   ./idempotency_check.sh inventory_file [ansible_opts] playbook
+#   idempotence_check inventory_file [ansible_opts] playbook
 
-set -eu
+set -euo pipefail
 
 play_count=2
 log_file=play.log

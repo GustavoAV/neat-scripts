@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # DESCRIPTION:
 #   Get all tags of said docker image.
 #   Before execution, it checks if curl/wget and python are available.
 # USAGE:
-#   docker-tags <image-name>
+#   docker_tags <image-name>
 # BASED ON:
 #   https://stackoverflow.com/a/48931329
 
@@ -75,7 +75,6 @@ main() {
 }
 
 dependencies_check
-
 main "$@"
 
 exit 0

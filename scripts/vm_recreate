@@ -4,7 +4,7 @@
 #   Recreate VMs with Vagrant and do additional config to enable connection right away.
 #   Note that you first need to create the ssh keys and configure the Vagrantfile.
 # USAGE
-#   ./vm-recreate.sh <vm_1> <vm_2> ... <vm_n>
+#   vm_recreate <vm_1> <vm_2> ... <vm_n>
 
 set -eu
 
