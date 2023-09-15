@@ -26,7 +26,7 @@ chmod +x <filename>  # Give executable permissions to the file
 ./<filename>         # Run the script
 
 # If you want to make it available system wide
-sudo mv <filename> /usr/local/bin/
+sudo cp <filename> /usr/local/bin/
 ```
 
 > Note that these can only run in *nix environments (and maybe WSL, dunno).
