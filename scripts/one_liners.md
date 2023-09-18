@@ -7,7 +7,7 @@ This contains some simpler commands, not scripts, that are helpful.
 - [One Liners](#one-liners)
   - [Table of Contents](#table-of-contents)
   - [Maven via Docker](#maven-via-docker)
-  - [lsb_release alternative](#lsb_release-alternative)
+  - [lsb\_release alternative](#lsb_release-alternative)
   - [HTTP responde status code only](#http-responde-status-code-only)
   - [Create SSH Key without prompt](#create-ssh-key-without-prompt)
 
@@ -17,13 +17,13 @@ Run Maven via Docker, mapping your current path to the container and reusing you
 
 ```bash
 docker run --rm \
-  -e MAVEN_CONFIG=/var/maven/.m2 \
-  -u $(id -u):$(id -g) \
-  -v $(pwd):/app \
-  -v ~/.m2/:/var/maven/.m2/ \
-  -w /app \
-  maven:3.9.0-eclipse-temurin-11 \
-  mvn clean package
+    -e MAVEN_CONFIG=/var/maven/.m2 \
+    -u $(id -u):$(id -g) \
+    -v $(pwd):/app \
+    -v ~/.m2/:/var/maven/.m2/ \
+    -w /app \
+    maven:3.9.0-eclipse-temurin-11 \
+    mvn clean package
 ```
 
 ## lsb_release alternative
@@ -40,15 +40,15 @@ Gets only the status code of a http request. You can use this in a script to, fo
 
 ```bash
 status_code=$(
-  curl
-    --head
-    --insecure
-    --location
-    --output /dev/null
-    --silent
-    --user "${CI_REGISTRY_USER}:${CI_REGISTRY_PASSWORD}"
-    --write-out "%{http_code}"
-    "https://${CI_REPOSITORY}/repository/maven-releases/foo/bar.jar"
+    curl
+        --head
+        --insecure
+        --location
+        --output /dev/null
+        --silent
+        --user "${CI_REGISTRY_USER}:${CI_REGISTRY_PASSWORD}"
+        --write-out "%{http_code}"
+        "https://${CI_REPOSITORY}/repository/maven-releases/foo/bar.jar"
 )
 ```
 

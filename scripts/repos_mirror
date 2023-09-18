@@ -12,53 +12,53 @@ if [[ ${TRACE-0} == "1" ]]; then set -o xtrace; fi
 dest_group_url="$1"
 
 if [[ -e "source_project_list.txt" ]]; then
-	source_project_list="$(cat source_project_list.txt)"
+    source_project_list="$(cat source_project_list.txt)"
 else
-	echo "You have to create the 'source_project_list.txt' file first!" >&2
-	exit 1
+    echo "You have to create the 'source_project_list.txt' file first!" >&2
+    exit 1
 fi
 
 main() {
-	for source_project_url in $source_project_list; do
+    for source_project_url in $source_project_list; do
 
-		# Get project name only, removing ".git" if present
-		project_name=$(basename "$source_project_url" .git)
+        # Get project name only, removing ".git" if present
+        project_name=$(basename "$source_project_url" .git)
 
-		# On the first iteration, clones base project
-		# On the second, clones the wiki
-		for type in "base" "wiki"; do
+        # On the first iteration, clones base project
+        # On the second, clones the wiki
+        for type in "base" "wiki"; do
 
-			if [[ $type == "wiki" ]]; then
-				source_project_url="$source_project_url.wiki"
-				project_name="$project_name.wiki"
-			fi
+            if [[ $type == "wiki" ]]; then
+                source_project_url="$source_project_url.wiki"
+                project_name="$project_name.wiki"
+            fi
 
-			echo -e "\nCloning $project_name from source repository..."
-			git clone --mirror --quiet "$source_project_url"
+            echo -e "\nCloning $project_name from source repository..."
+            git clone --mirror --quiet "$source_project_url"
 
-			cd "$project_name.git"
+            cd "$project_name.git"
 
-			if [[ $type == "base" ]]; then
-				# Remove uneeded and platform specific git objects
-				git show-ref |
-					cut -d ' ' -f2 |
-					grep -e 'pull' -e 'merge-requests' -e 'environments' |
-					xargs -r -L1 git update-ref -d ||
-					true
-			fi
+            if [[ $type == "base" ]]; then
+                # Remove uneeded and platform specific git objects
+                git show-ref |
+                    cut -d ' ' -f2 |
+                    grep -e 'pull' -e 'merge-requests' -e 'environments' |
+                    xargs -r -L1 git update-ref -d ||
+                    true
+            fi
 
-			git remote set-url origin "$dest_group_url/$project_name"
+            git remote set-url origin "$dest_group_url/$project_name"
 
-			echo "Sending $project_name to destiny repository..."
-			git push --set-upstream origin >/dev/null
+            echo "Sending $project_name to destiny repository..."
+            git push --set-upstream origin >/dev/null
 
-			cd ../
-			# Question mark avoids incorrectly evaluating as "/"
-			rm -rf "${project_name:?}.git/"
+            cd ../
+            # Question mark avoids incorrectly evaluating as "/"
+            rm -rf "${project_name:?}.git/"
 
-		done
+        done
 
-	done
+    done
 }
 
 main
