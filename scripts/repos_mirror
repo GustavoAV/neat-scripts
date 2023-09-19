@@ -24,44 +24,47 @@ clean_directory() {
 }
 
 mirror_repo() {
-    clean_directory "${project_name}.git"
+    local source_repo_url repo_name repo_path
 
-    echo -e "\n[INFO] Cloning $project_name from source repository..."
+    source_repo_url=$1
+    # Get project name only
+    repo_name=$(basename "$source_repo_url")
+    repo_path="${repo_name}.git"
+
+    clean_directory "$repo_path"
+
+    echo -e "\n[INFO] Cloning $repo_name from source repository..."
     # Allow script to continue if missing repo
-    git clone --quiet --mirror "$source_project_url" || return 0
+    git clone --quiet --mirror "$source_repo_url" || return 0
 
     # Remove uneeded and platform specific git objects
     # Allow failure since those objects can be absent
-    git -C "$project_name.git" show-ref |
-        cut -d ' ' -f2 |
+    git -C "$repo_path" show-ref |
+        cut --delimiter=' ' --fields=2 |
         grep -e 'pull' -e 'merge-requests' -e 'environments' |
-        xargs -r -L1 git update-ref -d ||
+        xargs --no-run-if-empty --max-lines=1 git update-ref -d ||
         true
 
-    git -C "$project_name.git" remote set-url origin "$dest_group_url/$project_name"
+    git -C "$repo_path" remote set-url origin "$dest_group_url/$repo_name"
 
-    echo "[INFO] Sending $project_name to destiny repository..."
-    git -C "$project_name.git" push --set-upstream origin >/dev/null
+    echo "[INFO] Sending $repo_name to destiny repository..."
+    git -C "$repo_path" push --set-upstream origin >/dev/null
 
-    clean_directory "${project_name}.git"
+    clean_directory "$repo_path"
 }
 
 main() {
-    while IFS= read -r source_project_url; do
-        # Get project name only, removing ".git" if present
-        project_name=$(basename "$source_project_url" .git)
+    local line
 
-        # On the first iteration, clones base project
-        # On the second, clones the wiki
-        for type in base wiki; do
+    # Loop through source_project_list.txt lines
+    while IFS= read -r line; do
+        # Remove ".git" if present at line end
+        # trunk-ignore(shellcheck/SC2001)
+        line=$(echo "$line" | sed 's/.git$//')
 
-            if [[ $type == wiki ]]; then
-                project_name="${project_name}.wiki"
-                source_project_url="${source_project_url}.wiki"
-            fi
-
-            mirror_repo
-        done
+        # Clone repo and its wiki
+        mirror_repo "${line}"
+        mirror_repo "${line}.wiki"
     done <source_project_list.txt
 }
 
