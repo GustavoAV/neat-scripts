@@ -3,7 +3,7 @@
 # DESCRIPTION:
 #   Clone and pushes git projects and their wikis to another repository.
 # USAGE:
-#   Create and fill "source_project_list.txt" with the projects url list and then run:
+#   Create and fill "source_project_list.txt" with the projects url list (https or ssh format) and then run:
 #   repos_mirror <dest-group-url>
 
 set -euo pipefail
@@ -11,54 +11,58 @@ if [[ ${TRACE-0} == "1" ]]; then set -o xtrace; fi
 
 dest_group_url="$1"
 
-if [[ -e "source_project_list.txt" ]]; then
-    source_project_list="$(cat source_project_list.txt)"
-else
-    echo "You have to create the 'source_project_list.txt' file first!" >&2
+if [[ ! -r source_project_list.txt ]]; then
+    echo "You need to create the source_project_list.txt file first!" >&2
     exit 1
 fi
 
-main() {
-    for source_project_url in $source_project_list; do
+# Remove if directory exists
+clean_directory() {
+    if [ -d "${1}" ]; then
+        rm -rf "${1}"
+    fi
+}
 
+mirror_repo() {
+    clean_directory "${project_name}.git"
+
+    echo -e "\n[INFO] Cloning $project_name from source repository..."
+    # Allow script to continue if missing repo
+    git clone --quiet --mirror "$source_project_url" || return 0
+
+    # Remove uneeded and platform specific git objects
+    # Allow failure since those objects can be absent
+    git -C "$project_name.git" show-ref |
+        cut -d ' ' -f2 |
+        grep -e 'pull' -e 'merge-requests' -e 'environments' |
+        xargs -r -L1 git update-ref -d ||
+        true
+
+    git -C "$project_name.git" remote set-url origin "$dest_group_url/$project_name"
+
+    echo "[INFO] Sending $project_name to destiny repository..."
+    git -C "$project_name.git" push --set-upstream origin >/dev/null
+
+    clean_directory "${project_name}.git"
+}
+
+main() {
+    while IFS= read -r source_project_url; do
         # Get project name only, removing ".git" if present
         project_name=$(basename "$source_project_url" .git)
 
         # On the first iteration, clones base project
         # On the second, clones the wiki
-        for type in "base" "wiki"; do
+        for type in base wiki; do
 
-            if [[ $type == "wiki" ]]; then
-                source_project_url="$source_project_url.wiki"
-                project_name="$project_name.wiki"
+            if [[ $type == wiki ]]; then
+                project_name="${project_name}.wiki"
+                source_project_url="${source_project_url}.wiki"
             fi
 
-            echo -e "\nCloning $project_name from source repository..."
-            git clone --mirror --quiet "$source_project_url"
-
-            cd "$project_name.git"
-
-            if [[ $type == "base" ]]; then
-                # Remove uneeded and platform specific git objects
-                git show-ref |
-                    cut -d ' ' -f2 |
-                    grep -e 'pull' -e 'merge-requests' -e 'environments' |
-                    xargs -r -L1 git update-ref -d ||
-                    true
-            fi
-
-            git remote set-url origin "$dest_group_url/$project_name"
-
-            echo "Sending $project_name to destiny repository..."
-            git push --set-upstream origin >/dev/null
-
-            cd ../
-            # Question mark avoids incorrectly evaluating as "/"
-            rm -rf "${project_name:?}.git/"
-
+            mirror_repo
         done
-
-    done
+    done <source_project_list.txt
 }
 
 main
