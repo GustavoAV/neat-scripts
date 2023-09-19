@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # DESCRIPTION:
-#   Clone and pushes git projects and their wikis to another repository.
+#   Clone and pushes git repositories to a repository group.
 # USAGE:
-#   Create and fill "source_project_list.txt" with the projects url list (https or ssh format) and then run:
+#   Create and fill "source_repository_list.txt" with the repositories url list (http or ssh format) and then run:
 #   repos_mirror <dest-group-url>
 
 set -euo pipefail
@@ -11,15 +11,15 @@ if [[ ${TRACE-0} == "1" ]]; then set -o xtrace; fi
 
 dest_group_url="$1"
 
-if [[ ! -r source_project_list.txt ]]; then
-    echo "You need to create the source_project_list.txt file first!" >&2
+if [[ ! -r source_repository_list.txt ]]; then
+    echo "You need to create the source_repository_list.txt file first!" >&2
     exit 1
 fi
 
 # Remove if directory exists
 clean_directory() {
-    if [ -d "${1}" ]; then
-        rm -rf "${1}"
+    if [ -d "$1" ]; then
+        rm -rf "$1"
     fi
 }
 
@@ -56,7 +56,7 @@ mirror_repo() {
 main() {
     local line
 
-    # Loop through source_project_list.txt lines
+    # Loop through source_repository_list.txt lines
     while IFS= read -r line; do
         # Remove ".git" if present at line end
         # trunk-ignore(shellcheck/SC2001)
@@ -65,7 +65,7 @@ main() {
         # Clone repo and its wiki
         mirror_repo "${line}"
         mirror_repo "${line}.wiki"
-    done <source_project_list.txt
+    done <source_repository_list.txt
 }
 
 main
