@@ -22,32 +22,22 @@ import pwd
 import random
 import sys
 
-# trunk-ignore(pylint/E0401)
 import cowsay
-
-
-def user_full_name():
-    """
-    Get current OS user full name
-    Based on: https://stackoverflow.com/a/15031204
-    """
-    uid = os.getuid()
-    user_info = pwd.getpwuid(uid)
-    full_name = user_info.pw_gecos.split(",")[0]
-    return full_name
 
 
 def main(arg_list):
     """
     Prints random cowsay
 
-    If provided, use cli args as the text
+    If provided, use cli args as the input
     Else, gets user full name
     """
     if len(arg_list) > 0:
         cow_string = " ".join(arg_list)
     else:
-        cow_string = f"Hello, {user_full_name()}!"
+        # Get current OS user full name: https://stackoverflow.com/a/15031204
+        user_full_name = pwd.getpwuid(os.getuid()).pw_gecos.split(",")[0]
+        cow_string = f"Hello, {user_full_name}!"
 
     # trunk-ignore(bandit/B311)
     random_cow = random.choice(cowsay.char_names)
