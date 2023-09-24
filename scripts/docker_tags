@@ -14,13 +14,13 @@ if [[ ${TRACE-0} == "1" ]]; then set -o xtrace; fi
 name="$1"
 
 # If "name" doesn't contain a slash, defaults to "library/name"
-if [[ $name =~ "/" ]]; then
-    repository="$name"
+if [[ ${name} =~ "/" ]]; then
+    repository="${name}"
 else
-    repository="library/$name"
+    repository="library/${name}"
 fi
 
-url="https://registry.hub.docker.com/v2/repositories/$repository/tags/?page_size=100"
+url="https://registry.hub.docker.com/v2/repositories/${repository}/tags/?page_size=100"
 
 dependencies_check() {
     # Is "curl" or "wget" available?
@@ -55,16 +55,16 @@ EOF
 main() {
     (
         # Keep looping until the variable URL is empty
-        while [[ -n $url ]]; do
+        while [[ -n ${url} ]]; do
             # Every iteration of the loop prints out a single dot to show progress as it got through all the pages (this is inline dot)
             echo >&2 -n "."
             # Curl the URL and pipe the output to Python. Python will parse the JSON and print the very first line as the next URL (it will leave it blank if there are no more pages)
             # then continue to loop over the results extracting only the name; all will be stored in a variable called content
-            content=$($download_cmd "$url" | $py_bin /tmp/json_process.py)
+            content=$(${download_cmd} "${url}" | ${py_bin} /tmp/json_process.py)
             # Let's get the first line of content which contains the next URL for the loop to continue
-            url=$(echo "$content" | head -n 1)
+            url=$(echo "${content}" | head -n 1)
             # Print the content without the first line (yes +2 is counter intuitive)
-            echo "$content" | tail -n +2
+            echo "${content}" | tail -n +2
         done
         # Finally break the line of dots
         echo >&2

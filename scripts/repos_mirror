@@ -18,7 +18,7 @@ fi
 
 # Remove if directory exists
 clean_directory() {
-    if [ -d "$1" ]; then
+    if [[ -d $1 ]]; then
         rm -rf "$1"
     fi
 }
@@ -28,29 +28,29 @@ mirror_repo() {
 
     source_repo_url=$1
     # Get project name only
-    repo_name=$(basename "$source_repo_url")
+    repo_name=$(basename "${source_repo_url}")
     repo_path="${repo_name}.git"
 
-    clean_directory "$repo_path"
+    clean_directory "${repo_path}"
 
-    echo -e "\n[INFO] Cloning $repo_name from source repository..."
+    echo -e "\n[INFO] Cloning ${repo_name} from source repository..."
     # Allow script to continue if missing repo
-    git clone --quiet --mirror "$source_repo_url" || return 0
+    git clone --quiet --mirror "${source_repo_url}" || return 0
 
     # Remove uneeded and platform specific git objects
     # Allow failure since those objects can be absent
-    git -C "$repo_path" show-ref |
+    git -C "${repo_path}" show-ref |
         cut --delimiter=' ' --fields=2 |
         grep -e 'pull' -e 'merge-requests' -e 'environments' |
         xargs --no-run-if-empty --max-lines=1 git update-ref -d ||
         true
 
-    git -C "$repo_path" remote set-url origin "$dest_group_url/$repo_name"
+    git -C "${repo_path}" remote set-url origin "${dest_group_url}/${repo_name}"
 
-    echo "[INFO] Sending $repo_name to destiny repository..."
-    git -C "$repo_path" push --set-upstream origin >/dev/null
+    echo "[INFO] Sending ${repo_name} to destiny repository..."
+    git -C "${repo_path}" push --set-upstream origin >/dev/null
 
-    clean_directory "$repo_path"
+    clean_directory "${repo_path}"
 }
 
 main() {
@@ -60,7 +60,7 @@ main() {
     while IFS= read -r line; do
         # Remove ".git" if present at line end
         # trunk-ignore(shellcheck/SC2001)
-        line=$(echo "$line" | sed 's/.git$//')
+        line=$(echo "${line}" | sed 's/.git$//')
 
         # Clone repo and its wiki
         mirror_repo "${line}"
