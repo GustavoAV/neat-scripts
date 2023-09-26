@@ -3,20 +3,15 @@
 # DESCRIPTION:
 #   Clone and pushes git repositories to a repository group.
 # USAGE:
-#   Create and fill "source_repository_list.txt" with the repositories url list (http or ssh format) and then run:
-#   repos_mirror <dest-group-url>
+#   Create and fill a file with the source repositories url list (http or ssh format) and then run:
+#   repos_mirror <repo_list_file> <dest_group_url>
 
 set -euo pipefail
 if [[ ${TRACE-0} == "1" ]]; then set -o xtrace; fi
 
-dest_group_url="$1"
+REPO_LIST_FILE="$1"
+DEST_GROUP_URL="$2"
 
-if [[ ! -r source_repository_list.txt ]]; then
-    echo "You need to create the source_repository_list.txt file first!" >&2
-    exit 1
-fi
-
-# Remove if directory exists
 clean_directory() {
     if [[ -d $1 ]]; then
         rm -rf "$1"
@@ -24,9 +19,12 @@ clean_directory() {
 }
 
 mirror_repo() {
-    local source_repo_url repo_name repo_path
+    local source_repo_url
+    local repo_name
+    local repo_path
 
-    source_repo_url=$1
+    source_repo_url="$1"
+
     # Get project name only
     repo_name=$(basename "${source_repo_url}")
     repo_path="${repo_name}.git"
@@ -45,7 +43,7 @@ mirror_repo() {
         xargs --no-run-if-empty --max-lines=1 git update-ref -d ||
         true
 
-    git -C "${repo_path}" remote set-url origin "${dest_group_url}/${repo_name}"
+    git -C "${repo_path}" remote set-url origin "${DEST_GROUP_URL}/${repo_name}"
 
     echo "[INFO] Sending ${repo_name} to destiny repository..."
     git -C "${repo_path}" push --set-upstream origin >/dev/null
@@ -54,18 +52,23 @@ mirror_repo() {
 }
 
 main() {
-    local line
+    local repo_url
 
-    # Loop through source_repository_list.txt lines
-    while IFS= read -r line; do
-        # Remove ".git" if present at line end
+    if [[ ! -r ${REPO_LIST_FILE} ]]; then
+        echo "[ERROR] Repositories list file missing or unreadable!" >&2
+        exit 1
+    fi
+
+    # Loop through REPO_LIST_FILE lines
+    while IFS= read -r repo_url; do
+        # Remove ".git" if present at repo_url end
         # trunk-ignore(shellcheck/SC2001)
-        line=$(echo "${line}" | sed 's/.git$//')
+        repo_url=$(echo "${repo_url}" | sed 's/.git$//')
 
         # Clone repo and its wiki
-        mirror_repo "${line}"
-        mirror_repo "${line}.wiki"
-    done <source_repository_list.txt
+        mirror_repo "${repo_url}"
+        mirror_repo "${repo_url}.wiki"
+    done <"${REPO_LIST_FILE}"
 }
 
 main
