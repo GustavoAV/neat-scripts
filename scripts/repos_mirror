@@ -2,15 +2,21 @@
 
 # DESCRIPTION:
 #   Clone and pushes git repositories to a repository group.
+#   If needed, also clone wiki repositories.
 # USAGE:
 #   Create and fill a file with the source repositories url list (http or ssh format) and then run:
 #   repos_mirror <repo_list_file> <dest_group_url>
+#   To include wikis:
+#   CLONE_WIKIS=true repos_mirror <repo_list_file> <dest_group_url>
 
 set -euo pipefail
 if [[ ${TRACE-0} == "1" ]]; then set -o xtrace; fi
 
 REPO_LIST_FILE="$1"
 DEST_GROUP_URL="$2"
+
+# By default, doesn't clone wikis
+: "${CLONE_WIKIS:=false}"
 
 clean_directory() {
     if [[ -d $1 ]]; then
@@ -68,9 +74,11 @@ main() {
         # trunk-ignore(shellcheck/SC2001)
         repo_url=$(echo "${repo_url}" | sed 's/.git$//')
 
-        # Clone repo and its wiki
         mirror_repo "${repo_url}"
-        mirror_repo "${repo_url}.wiki"
+
+        if "${CLONE_WIKIS}"; then
+            mirror_repo "${repo_url}.wiki"
+        fi
     done <"${REPO_LIST_FILE}"
 }
 
