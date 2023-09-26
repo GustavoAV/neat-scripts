@@ -29,11 +29,14 @@ mirror_repo() {
     repo_name=$(basename "${source_repo_url}")
     repo_path="${repo_name}.git"
 
-    clean_directory "${repo_path}"
-
     echo -e "\n[INFO] Cloning ${repo_name} from source repository..."
+
     # Allow script to continue if missing repo
-    git clone --quiet --mirror "${source_repo_url}" || return 0
+    if ! git clone --mirror "${source_repo_url}" >/dev/null 2>&1; then
+        echo "[WARN] Missing or inacessible repository!"
+        clean_directory "${repo_path}"
+        return 0
+    fi
 
     # Remove uneeded and platform specific git objects
     # Allow failure since those objects can be absent
