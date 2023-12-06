@@ -2,7 +2,7 @@
 # Miscellaneous #
 #################
 .vscode
-source_repository_list.txt
+*.txt
 
 ###################
 # Compiled source #
