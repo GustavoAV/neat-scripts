@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# DESCRIPTION
+#   List all deployments of a specific Kubernetes namespace and replace the registry.
+#   Note: Doesn't modify or fail on images without a specific registry.
+# USAGE
+#   kube_replace_registry <namespace> <old.registry.com> <new.registry.com>
+
 set -euo pipefail
 
 namespace="$1"
