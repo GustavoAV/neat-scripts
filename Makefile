@@ -1,4 +1,4 @@
-DOCKER_RUN := docker run -ti --rm -v $(PWD)/scripts:/app -w /app
+DOCKER_RUN := docker run --rm -v $(PWD)/scripts:/app -w /app
 
 ALPINE_IMAGE := alpine:3.17.2
 ARCHLINUX_IMAGE := archlinux:base
