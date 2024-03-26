@@ -11,8 +11,5 @@ jobs:
       - name: Checkout the codebase
         uses: actions/checkout@v4
 
-      - name: Install Docker
-        uses: docker-practice/actions-setup-docker@v1
-
       - name: Run Make
         run: make
