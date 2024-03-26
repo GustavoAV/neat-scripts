@@ -11,5 +11,10 @@ jobs:
       - name: Checkout the codebase
         uses: actions/checkout@v4
 
-      - name: Run Make
+      - name: Cache Docker images.
+        uses: ScribeMD/docker-cache@0.4.0
+        with:
+          key: docker-${{ runner.os }}-${{ hashFiles('Makefile') }}
+
+      - name: Run tests
         run: make
