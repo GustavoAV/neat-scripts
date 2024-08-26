@@ -12,15 +12,25 @@ set -euo pipefail
 
 info() {
     timestamp=$(date +'%F-%H%M%S')
+
+    echo ""
     echo "$timestamp [INFO]" "$@"
+    echo ""
 }
 
 install_pkgs() {
     info "Installing packages"
 
+    export DEBIAN_FRONTEND=noninteractive
     apt-get update -qq
-    DEBIAN_FRONTEND=noninteractive apt-get install -y wget openssh-server
-    
+    apt-get install -y \
+        wget \
+        openssh-server \
+        build-essential \
+        dkms
+    # This resolves to linux-headers-VERSION-azure in GitHub pipelines, which is not available
+    apt-get install -y linux-headers-"$(uname -r)" || true
+
     info "Apt trash cleaning"
 
     apt-get clean -y
@@ -52,7 +62,7 @@ import_key() {
 sudoers_config() {
     info "Sudoers config"
 
-    echo 'vagrant ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/vagrant
+    echo 'vagrant ALL=(ALL) NOPASSWD: ALL' >/etc/sudoers.d/vagrant
     chmod 0440 /etc/sudoers.d/vagrant
     sed -i "s|^requiretty|# requiretty|" /etc/sudoers
     visudo --check
@@ -62,7 +72,7 @@ sshd_config() {
     info "Sshd config"
 
     systemctl enable ssh
-    echo 'UseDNS no' > /etc/ssh/sshd_config.d/vagrant
+    echo 'UseDNS no' >/etc/ssh/sshd_config.d/vagrant
     install -d /run/sshd
     sshd -t
 }
