@@ -7,29 +7,26 @@ DEBIAN_IMAGE := debian:bookworm-slim
 PYTHON_IMAGE := python:3.11.4-bookworm
 UBUNTU_SYSTEMD_IMAGE := geerlingguy/docker-ubuntu2404-ansible:latest
 
-all: docker_tags install_pkgs random_cowsay standalone_envsubst vagrant_box_setup
+all: docker_tags.sh install_pkgs.sh random_cowsay.sh standalone_envsubst.sh vagrant_box_setup.sh
 
-.PHONY: docker_tags
-docker_tags:
+docker_tags.sh:
 	$(DOCKER_RUN) $(PYTHON_IMAGE) ./$@ alpine
 
-.PHONY: install_pkgs
-install_pkgs:
+install_pkgs.sh:
 	$(DOCKER_RUN) $(DEBIAN_IMAGE) ./$@ tree
 	$(DOCKER_RUN) $(ARCHLINUX_IMAGE) ./$@ tree
 	$(DOCKER_RUN) $(CENTOS_IMAGE) ./$@ tree
 
-.PHONY: random_cowsay
-random_cowsay:
+random_cowsay.sh:
 	$(DOCKER_RUN) $(PYTHON_IMAGE) /bin/bash -c ' \
 		export PATH="$$HOME/.local/bin/:$$PATH" \
 		&& pip install --user cowsay lolcat \
 		&& ./$@ | lolcat'
 
-.PHONY: standalone_envsubst
-standalone_envsubst:
+standalone_envsubst.sh:
 	$(DOCKER_RUN) $(ALPINE_IMAGE) /bin/sh -c "./$@ && envsubst --version"
 
-.PHONY: vagrant_box_setup
-vagrant_box_setup:
+vagrant_box_setup.sh:
 	$(DOCKER_RUN) $(UBUNTU_SYSTEMD_IMAGE) ./$@
+
+.PHONY: docker_tags.sh install_pkgs.sh random_cowsay.sh standalone_envsubst.sh vagrant_box_setup.sh
