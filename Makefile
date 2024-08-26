@@ -5,8 +5,9 @@ ARCHLINUX_IMAGE := archlinux:base
 CENTOS_IMAGE := centos:7
 DEBIAN_IMAGE := debian:bookworm-slim
 PYTHON_IMAGE := python:3.11.4-bookworm
+UBUNTU_SYSTEMD_IMAGE := geerlingguy/docker-ubuntu2404-ansible:latest
 
-all: docker_tags install_pkgs random_cowsay standalone_envsubst
+all: docker_tags install_pkgs random_cowsay standalone_envsubst vagrant_box_setup
 
 .PHONY: docker_tags
 docker_tags:
@@ -28,3 +29,7 @@ random_cowsay:
 .PHONY: standalone_envsubst
 standalone_envsubst:
 	$(DOCKER_RUN) $(ALPINE_IMAGE) /bin/sh -c "./$@ && envsubst --version"
+
+.PHONY: vagrant_box_setup
+vagrant_box_setup:
+	$(DOCKER_RUN) $(UBUNTU_SYSTEMD_IMAGE) ./$@
