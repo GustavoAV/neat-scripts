@@ -19,12 +19,7 @@ install_pkgs() {
     info "Installing packages"
 
     apt-get update -qq
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
-        wget \
-        openssh-server \
-        linux-headers-"$(uname -r)" \
-        build-essential \
-        dkms
+    DEBIAN_FRONTEND=noninteractive apt-get install -y wget openssh-server
     
     info "Apt trash cleaning"
 
