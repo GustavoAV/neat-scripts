@@ -14,7 +14,7 @@ set -eu
 n=0
 max=2
 
-pkg_mgr_list="apt-get yum pacman"
+pkg_mgr_list="apt-get yum microdnf pacman"
 
 # Checks available package manager
 check_pkg_mgr() {
@@ -31,38 +31,37 @@ check_pkg_mgr() {
 
 # Populates "install" and "clean" vars
 case $(check_pkg_mgr) in
-apt-get)
-    install='DEBIAN_FRONTEND=noninteractive \
-                && apt-get update -qq \
-                && apt-get install -y --no-install-recommends $@'
-    clean='apt-get clean \
-                && rm -rf /var/lib/apt/lists /var/cache/apt/archives'
-    ;;
-yum)
-    install='yum install -y --setopt=tsflags=nodocs $@'
-    clean='yum clean all -y \
-                && rm -rf /var/cache/yum'
-    ;;
-pacman)
-    install='pacman -Sy --needed --noconfirm $@'
-    clean='pacman -Scc --noconfirm && \
-                rm -rf /var/cache/pacman/pkg/*'
-    ;;
-*) exit 1 ;;
+    apt-get)
+        install='apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends $@'
+        clean='apt-get clean && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*'
+        ;;
+    yum)
+        install='yum install -y --setopt=tsflags=nodocs $@'
+        clean='yum clean all -y && rm -rf /var/cache/yum'
+        ;;
+    microdnf)
+        install='microdnf install -y --setopt=tsflags=nodocs $@'
+        clean='microdnf clean all -y && rm -rf /var/cache/yum'
+        ;;
+    pacman)
+        install='pacman -Sy --needed --noconfirm $@'
+        clean='pacman -Scc --noconfirm && rm -rf /var/cache/pacman/pkg/*'
+        ;;
+    *) exit 1 ;;
 esac
 
 # Runs install retrying if fails
-until [ "${n}" -gt "${max}" ]; do
+until [ "$n" -gt "$max" ]; do
     set +e
-    (eval "${install}")
+    (eval "$install")
     code=$?
     set -e
 
-    if [ "${code}" -eq 0 ]; then
+    if [ "$code" -eq 0 ]; then
         break
     fi
-    if [ "${n}" -eq "${max}" ]; then
-        exit "${code}"
+    if [ "$n" -eq "$max" ]; then
+        exit "$code"
     fi
 
     echo "Install failed, retrying..."
@@ -70,6 +69,6 @@ until [ "${n}" -gt "${max}" ]; do
 done
 
 # Removes package manager trash
-eval "${clean}"
+eval "$clean"
 
 exit 0
