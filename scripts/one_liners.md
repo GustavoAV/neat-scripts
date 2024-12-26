@@ -11,6 +11,17 @@ This contains some simpler commands, not scripts, that are helpful.
   - [HTTP responde status code only](#http-responde-status-code-only)
   - [Create SSH Key without prompt](#create-ssh-key-without-prompt)
 
+## Get interfaces name and IP only
+
+The command `ip a` shows information about your machine networks, but contains a little too much info that you might not need. To get only the interfaces name and IP, run this.
+
+```bash
+# ip: Show interfaces info in oneline
+# tr: Removes duplicate spaces
+# cut: Separate collumns by space and shows only specific ones
+ip -o address | tr -s " " | cut -d " " -f 2,4
+```
+
 ## Maven via Docker
 
 Run Maven via Docker, mapping your current path to the container and reusing your local dependencies (from the `~/m2/` directory). This is specially useful when you have multiple Java projects.
